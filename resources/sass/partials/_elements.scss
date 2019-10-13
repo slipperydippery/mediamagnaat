@@ -1,0 +1,33 @@
+.clickable {
+    cursor: pointer;
+}
+
+.noselect {
+    user-select: none;
+}
+
+.hoverchild {
+    z-index: 100;
+    opacity: 0;
+    transition: all .5s;
+}
+.hoverparent:hover .hoverchild {
+    opacity: 1;
+}
+
+.abosolute-top-right {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
+.ratio-16-9 {
+    width: 100%;
+    padding-bottom: 67%;
+    position: relative;
+}
+
+.ratio-content {
+    position: absolute;
+    top: 0; bottom: 0; left: 0; right: 0;
+}

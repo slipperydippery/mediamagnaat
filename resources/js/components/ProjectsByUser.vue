@@ -1,0 +1,43 @@
+<script>
+    export default {
+        name: "ProjectsByUser",
+
+        props: [
+            'projects'
+        ],
+
+        data() {
+            return {
+            }
+        },
+
+        mounted() {
+            this.$eventBus.$on('addedProject', this.addProject);
+        },
+
+        computed: {
+            chunkedDecks () {
+                return _.chunk(this.projects,4)
+            }
+        },
+
+        methods: {
+            addProject(project) {
+                this.projects.push(project);
+                this.$forceUpdate();
+            },
+
+            cardCounter(project) {
+                if('cards' in project) {
+                    return project.cards.length
+                }
+                return 0
+            },
+
+            fontSize(string) {
+                return ((Math.round((10 / Math.pow(string.length, 0.4)) * 10))/ 10) ;
+            }
+        }
+    }
+</script>
+
