@@ -18,8 +18,6 @@ class CreateVideosTable extends Migration
             $table->string('title')->nullable();
             $table->text('description')->nullable();
             $table->string('link');
-            $table->unsignedBigInteger('publicationable_id');
-            $table->string('publicationable_string');
             $table->timestamps();
         });
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Entrypoint;
 use App\Project;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -38,14 +39,16 @@ class ProjectController extends Controller
     {
         $user = auth('api')->user();
 
-        $deck = Project::create([
+        $project = Project::create([
             'title'         => $request->input('project.title'),
             'description'   => $request->input('project.description'),
             'user_id'       => $user->id,
             'public'        => $request->input('project.public'),
         ]);
 
-        return $deck;
+        $project->entrypoint()->create( [] );
+
+        return $project;
     }
 
     /**

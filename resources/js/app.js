@@ -27,6 +27,10 @@ Vue.component('manage-project-modal', require('./components/ManageProjectModal.v
 Vue.component('projects-by-user', require('./components/ProjectsByUser.vue').default);
 Vue.component('edit-project-button', require('./components/EditProjectButton.vue').default);
 
+Vue.component('new-publication-button', require('./components/NewPublicationButton.vue').default);
+Vue.component('manage-publication-modal', require('./components/ManagePublicationModal.vue').default);
+Vue.component('publications-tree', require('./components/PublicationsTree.vue').default);
+Vue.component('publication-children', require('./components/PublicationChildren.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

@@ -22,25 +22,38 @@
                             edit
                         </i>
                     </edit-project-button>
+
+
+                    <manage-project-modal>
+                    </manage-project-modal>
                 </div>
 
                 <a href=" # " class="inline-block w-full px-8 mr-4 lg:w-auto bg-secondary hover:bg-secondary-dark text-white font-bold py-2 rounded"> Start test </a>
-                <new-publication inline-template>
+                <new-publication-button inline-template>
                     <button class="inline-block w-full px-8 lg:w-auto bg-gray-200 hover:bg-blue-700 text-gray-700 hover:text-white font-bold py-2 rounded"
-                            @click="openNewCardModal"
+                            @click="newPublicationInModal"
                     >
-                        Add a Publication
+                        Voeg een publicatie toe
                     </button>
-                </new-publication>
+            </new-publication-button>
 
-                <manage-project-modal>
-                </manage-project-modal>
+                <manage-publication-modal
+                    :project_id = " {{ $project->id  }} "
+                    :entrypoint = " {{ $project->publications->count() === 0 ? 1 : 0 }} "
+                >
+                </manage-publication-modal>
+
 
 
 
             </div>
         </div>
     </div>
+
+    <publications-tree
+        :project = " {{ json_encode($project) }} "
+    >
+    </publications-tree>
 
 
 @endsection

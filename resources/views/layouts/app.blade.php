@@ -30,6 +30,8 @@
 
     <portal-target name="project">
     </portal-target>
+    <portal-target name="publication">
+    </portal-target>
 </div>
 
 {{-- scripts  --}}

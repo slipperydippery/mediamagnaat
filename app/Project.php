@@ -13,6 +13,11 @@ class Project extends Model
 
     public function entrypoint()
     {
-        return $this->belongsTo(Publication::class);
+        return $this->hasOne(Entrypoint::class);
+    }
+
+    public function publications()
+    {
+        return $this->hasMany(Publication::class);
     }
 }

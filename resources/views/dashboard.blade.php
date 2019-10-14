@@ -21,6 +21,12 @@
 
 
 
+
+
+
+        </div>
+    </div>
+    <div class="container mx-auto">
             <projects-by-user
                 :projects = " {{ json_encode($projects) }} "
                 inline-template
@@ -43,12 +49,6 @@
                     </div>
                 </div>
             </projects-by-user>
-
-
-
-        </div>
-    </div>
-    <div class="container mx-auto">
 
 
     </div>
