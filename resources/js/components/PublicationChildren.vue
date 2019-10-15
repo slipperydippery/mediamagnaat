@@ -86,7 +86,6 @@
             },
 
             editPublication(publication) {
-                console.log(publication)
                 this.$eventBus.$emit('editPublicationInModal', publication)
             }
         }

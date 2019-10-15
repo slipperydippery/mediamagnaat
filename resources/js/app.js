@@ -10,6 +10,17 @@ window.Vue = require('vue');
 import PortalVue from 'portal-vue'
 Vue.use(PortalVue);
 
+import VueVideoPlayer from 'vue-video-player'
+
+// require videojs style
+import 'video.js/dist/video-js.css'
+// import 'vue-video-player/src/custom-theme.css'
+
+Vue.use(VueVideoPlayer, /* {
+  options: global default options,
+  events: global videojs events
+} */)
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -31,6 +42,10 @@ Vue.component('new-publication-button', require('./components/NewPublicationButt
 Vue.component('manage-publication-modal', require('./components/ManagePublicationModal.vue').default);
 Vue.component('publications-tree', require('./components/PublicationsTree.vue').default);
 Vue.component('publication-children', require('./components/PublicationChildren.vue').default);
+
+Vue.component('player-container', require('./components/PlayerContainer.vue').default);
+Vue.component('show-video', require('./components/ShowVideo.vue').default);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

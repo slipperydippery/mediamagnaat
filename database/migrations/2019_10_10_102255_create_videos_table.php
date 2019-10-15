@@ -17,7 +17,7 @@ class CreateVideosTable extends Migration
             $table->bigIncrements('id');
             $table->string('title')->nullable();
             $table->text('description')->nullable();
-            $table->string('link');
+            $table->string('link')->nullable();
             $table->timestamps();
         });
     }

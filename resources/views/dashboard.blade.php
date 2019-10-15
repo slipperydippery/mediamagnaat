@@ -18,12 +18,6 @@
 
             <manage-project-modal>
             </manage-project-modal>
-
-
-
-
-
-
         </div>
     </div>
     <div class="container mx-auto">
@@ -34,7 +28,7 @@
                 <div class="mt-8 text-left">
                     <h2 class="ml-2 text-xl sm:text-base md:text-xl lg:text-2xl xl:text-3xl antialiased tracking-tight font-semibold text-gray-700 underline"> Jouw Projecten: </h2>
                     <div class="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 inline-block p-2 text-gray-100" v-for="project in projects" :key="project.id">
-                        <a :href="'project/' + project.id" class="block bg-gray-600 hover:bg-gray-700 rounded shadow p-4">
+                        <a :href="'project/' + project.id + '/edit'" class="block bg-gray-600 hover:bg-gray-700 rounded shadow p-4">
                             <span class="icons flex flex-row-reverse pb-4 text-gray-400">
                                 <span class="pr-2">
                                     @{{ cardCounter(project) }}

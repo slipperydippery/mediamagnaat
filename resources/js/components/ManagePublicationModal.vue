@@ -27,14 +27,9 @@
                             <textarea class="form-textarea mt-1 block w-full" rows="3" placeholder="A short description, you can build this out later." v-model="publication.description"></textarea>
                         </label>
                         <label class="block mb-2" for="input">Video link</label>
-                        <input
-                            type="text"
-                            class="form-input mt-1 block w-full"
-                            placeholder="http://vimeo.com/..."
-                            required
-                            v-model="publication.publicationable.link"
-                            @keydown.esc="resetModal"
-                        >
+                        <input type="file" class="form-control" v-on:change="onFileChange" accept=".mp4">
+                        <div class="mt-3">Gekozen bestand: {{ video.file ? video.file.name : '' }}</div>
+
                     </div>
                     <button type="submit" class="block w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-5" @click="storePublication">
                         <span v-if="newPublication">
@@ -44,8 +39,11 @@
                             Update Publication
                         </span>
                     </button>
-                    <button type="submit" class="block w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-5" @click="deletePublication(publication)">
-                        <span v-if=" ! newPublication">
+                    <button type="submit" class="block w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-5"
+                            @click="deletePublication(publication)"
+                            v-if=" ! newPublication"
+                    >
+                        <span >
                             Verwijder publicatie
                         </span>
                     </button>
@@ -68,6 +66,9 @@
             return {
                 show: false,
                 newPublication: true,
+                video: {
+                    file: ''
+                },
                 publication: {
                     title: '',
                     description: '',
@@ -76,7 +77,6 @@
                     publication_id: null,
                     publicationable: {
                         type: 'video',
-                        link: '',
                     }
                 },
                 active: false,
@@ -117,18 +117,23 @@
                     publication: home.publication
                 })
                     .then( response => {
-                        window.location.href = '/project/' + this.project_id
+                        window.location.href = '/project/' + this.project_id + '/edit'
                     } )
             },
 
             storeNewPublication() {
                 var home = this
-                axios.post('/api/publication', {
-                    publication: home.publication
+                var formData = new FormData();
+                formData.append('file', this.video.file)
+                formData.append('publication', JSON.stringify(this.publication))
+                axios.post('/api/publication', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
                 })
                     .then( response => {
                         this.$eventBus.$emit('addedPublication', response.data)
-                        window.location.href = '/project/' + this.project_id
+                        window.location.href = '/project/' + this.project_id + '/edit'
                         this.resetModal
                     });
             },
@@ -163,6 +168,10 @@
                 this.publication = publication
                 this.show = true
             },
+
+            onFileChange(e) {
+                this.video.file = e.target.files[0]
+            }
         }
     }
 </script>

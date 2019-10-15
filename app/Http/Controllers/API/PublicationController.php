@@ -34,19 +34,22 @@ class PublicationController extends Controller
      */
     public function store(Request $request)
     {
-        $project = Project::find( $request->input('publication.project_id') );
-        $video = Video::create([
-            'link'                      => $request->input('publication.publicationable.link'),
-        ]);
+        $publicationinput = json_decode($request->publication);
+        $file = $request->file('file');
+
+        $project = Project::find( $publicationinput->project_id );
+
+        $video = Video::registerFile($file);
+
         $video->publication()->create([
-            'title'                     => $request->input('publication.title'),
-            'description'               => $request->input('publication.description'),
+            'title'                     => $publicationinput->title,
+            'description'               => $publicationinput->description,
             'project_id'                => $project->id,
-            'publication_id'            => $request->input('publication.publication_id'),
+            'publication_id'            => $publicationinput->publication_id,
         ]);
 
 
-        if( $request->input('publication.entrypoint') ){
+        if( $publicationinput->entrypoint ){
             $project->entrypoint->publication()->associate($video->publication);
             $project->entrypoint->save();
         }

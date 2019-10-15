@@ -8,6 +8,12 @@
                 <span class="icons flex flex-row-reverse pb-4 text-gray-400">
                 </span>
                 <div class="text-2xl mb-2 h-16 overflow-hidden text-center"> {{ project.entrypoint.publication.title }} </div>
+                <span
+                    class="clickable absolute bottom-0 left-0 right-0 text-center p-2"
+                    @click="editPublication(project.entrypoint.publication)"
+                >
+                    Edit
+                </span>
             </span>
         </div>
         <publication-children
@@ -40,6 +46,10 @@
             addedPublication(publication) {
                 // if(publicationqqq)
             },
+
+            editPublication(publication) {
+                this.$eventBus.$emit('editPublicationInModal', publication)
+            }
         }
     }
 

@@ -26,6 +26,7 @@
     },
     "dependencies": {
         "mix-tailwindcss": "^1.2.0",
-        "portal-vue": "^2.1.6"
+        "portal-vue": "^2.1.6",
+        "vue-video-player": "^5.0.2"
     }
 }
