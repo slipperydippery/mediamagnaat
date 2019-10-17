@@ -23,3 +23,5 @@ Route::apiResources([
     'project' 		=> 'API\ProjectController',
     'publication'   => 'API\PublicationController',
 ]);
+
+Route::post('/updatepublication/{publication}', 'API\PublicationController@updatepublication');

@@ -12,23 +12,27 @@
 
                 <div class="w-full flex justify-between mt-2 pb-4">
                     <span>
-                         cards
+                         item 1
+                    </span>
+                    <span>
+                         item 2
                     </span>
                     <edit-project-button
                         :project = "{{ json_encode($project)  }}"
                         inline-template
                     >
-                        <i class="material-icons clickable" @click="editProjectInModal">
-                            edit
-                        </i>
+                        <span>
+                            <i class="material-icons clickable" @click="editProjectInModal">
+                                edit
+                            </i>
+                            <manage-project-modal>
+                            </manage-project-modal>
+                            </span>
                     </edit-project-button>
 
-
-                    <manage-project-modal>
-                    </manage-project-modal>
                 </div>
 
-                <a href=" # " class="inline-block w-full px-8 mr-4 lg:w-auto bg-secondary hover:bg-secondary-dark text-white font-bold py-2 rounded"> Start test </a>
+                <a href=" {{ route('project.show', $project) }} " class="inline-block w-full px-8 mr-4 lg:w-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 rounded"> Bekijk project </a>
                 <new-publication-button inline-template>
                     <button class="inline-block w-full px-8 lg:w-auto bg-gray-200 hover:bg-blue-700 text-gray-700 hover:text-white font-bold py-2 rounded"
                             @click="newPublicationInModal"

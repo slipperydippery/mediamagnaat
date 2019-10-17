@@ -1929,7 +1929,12 @@ __webpack_require__.r(__webpack_exports__);
   },
   watch: {
     show: function show(newVal, oldVal) {
-      if (newVal == true) {// setTimeout(() => this.$refs.input.focus(), 100);
+      var _this = this;
+
+      if (newVal == true) {
+        setTimeout(function () {
+          return _this.$refs.input.focus();
+        }, 100);
       }
     }
   },
@@ -1952,13 +1957,13 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     storeNewProject: function storeNewProject() {
-      var _this = this;
+      var _this2 = this;
 
       var home = this;
       axios.post('/api/project', {
         project: home.project
       }).then(function (response) {
-        _this.$eventBus.$emit('addedProject', response.data);
+        _this2.$eventBus.$emit('addedProject', response.data);
 
         home.resetModal();
       });
@@ -2051,6 +2056,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "ManagePublicationModal",
   props: ['entrypoint', 'project_id'],
@@ -2059,7 +2080,14 @@ __webpack_require__.r(__webpack_exports__);
       show: false,
       newPublication: true,
       video: {
-        file: ''
+        file: {
+          name: ''
+        }
+      },
+      thumbnail: {
+        file: {
+          name: ''
+        }
       },
       publication: {
         title: '',
@@ -2071,7 +2099,8 @@ __webpack_require__.r(__webpack_exports__);
           type: 'video'
         }
       },
-      active: false
+      active: false,
+      uploading: false
     };
   },
   mounted: function mounted() {
@@ -2095,6 +2124,8 @@ __webpack_require__.r(__webpack_exports__);
   computed: {},
   methods: {
     storePublication: function storePublication() {
+      this.uploading = true;
+
       if (this.newPublication) {
         this.storeNewPublication();
         return;
@@ -2105,9 +2136,15 @@ __webpack_require__.r(__webpack_exports__);
     updatePublication: function updatePublication() {
       var _this2 = this;
 
-      var home = this;
-      axios.patch('/api/publication/' + this.publication.id, {
-        publication: home.publication
+      var updateFormData = new FormData();
+      updateFormData.append('videofile', this.video.file);
+      updateFormData.append('thumbnail', this.thumbnail.file);
+      updateFormData.append('publication', JSON.stringify(this.publication));
+      console.log(updateFormData);
+      axios.post('/api/updatepublication/' + this.project_id, updateFormData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
       }).then(function (response) {
         window.location.href = '/project/' + _this2.project_id + '/edit';
       });
@@ -2115,9 +2152,9 @@ __webpack_require__.r(__webpack_exports__);
     storeNewPublication: function storeNewPublication() {
       var _this3 = this;
 
-      var home = this;
       var formData = new FormData();
-      formData.append('file', this.video.file);
+      formData.append('videofile', this.video.file);
+      formData.append('thumbnail', this.thumbnail.file);
       formData.append('publication', JSON.stringify(this.publication));
       axios.post('/api/publication', formData, {
         headers: {
@@ -2143,6 +2180,31 @@ __webpack_require__.r(__webpack_exports__);
     },
     resetModal: function resetModal() {
       this.show = false;
+      this.newPublication = true;
+      this.video = {
+        file: {
+          name: ''
+        }
+      };
+      this.thumbnail = {
+        file: {
+          name: ''
+        }
+      };
+      this.publication = {
+        title: '',
+        description: '',
+        project_id: null,
+        entrypoint: false,
+        publication_id: null,
+        publicationable: {
+          type: 'video'
+        }
+      };
+      this.active = false;
+      this.publication.entrypoint = this.entrypoint;
+      this.publication.project_id = this.project_id;
+      this.show = false;
     },
     openModal: function openModal() {
       this.show = true;
@@ -2154,10 +2216,15 @@ __webpack_require__.r(__webpack_exports__);
     editPublication: function editPublication(publication) {
       this.newPublication = false;
       this.publication = publication;
+      this.video.file.name = publication.publicationable.link;
+      this.thumbnail.file.name = publication.publicationable.thumbnail;
       this.show = true;
     },
-    onFileChange: function onFileChange(e) {
+    onVideoChange: function onVideoChange(e) {
       this.video.file = e.target.files[0];
+    },
+    onThumbnailChange: function onThumbnailChange(e) {
+      this.thumbnail.file = e.target.files[0];
     }
   }
 });
@@ -2423,6 +2490,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "PublicationChildren",
   props: ['publication', 'project'],
@@ -2484,6 +2570,16 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -51117,14 +51213,14 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "label",
-                    { staticClass: "block mb-2", attrs: { for: "input" } },
-                    [_vm._v("Video link")]
+                    { staticClass: "block mb-2 mt-3", attrs: { for: "input" } },
+                    [_vm._v("Video")]
                   ),
                   _vm._v(" "),
                   _c("input", {
                     staticClass: "form-control",
                     attrs: { type: "file", accept: ".mp4" },
-                    on: { change: _vm.onFileChange }
+                    on: { change: _vm.onVideoChange }
                   }),
                   _vm._v(" "),
                   _c("div", { staticClass: "mt-3" }, [
@@ -51132,32 +51228,67 @@ var render = function() {
                       "Gekozen bestand: " +
                         _vm._s(_vm.video.file ? _vm.video.file.name : "")
                     )
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    { staticClass: "block mb-2 mt-3", attrs: { for: "input" } },
+                    [_vm._v("Video thumbnail")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    staticClass: "form-control",
+                    attrs: { type: "file", accept: ".jpg, .png" },
+                    on: { change: _vm.onThumbnailChange }
+                  }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mt-3" }, [
+                    _vm._v(
+                      "Gekozen bestand: " +
+                        _vm._s(
+                          _vm.thumbnail.file ? _vm.thumbnail.file.name : ""
+                        )
+                    )
                   ])
                 ]
               ),
               _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass:
-                    "block w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-5",
-                  attrs: { type: "submit" },
-                  on: { click: _vm.storePublication }
-                },
-                [
-                  _vm.newPublication
-                    ? _c("span", [
-                        _vm._v(
-                          "\n                        Create Publication\n                    "
-                        )
-                      ])
-                    : _c("span", [
-                        _vm._v(
-                          "\n                        Update Publication\n                    "
-                        )
-                      ])
-                ]
-              ),
+              !_vm.uploading
+                ? _c(
+                    "button",
+                    {
+                      staticClass:
+                        "block w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-5",
+                      attrs: { type: "submit" },
+                      on: { click: _vm.storePublication }
+                    },
+                    [
+                      _vm.newPublication
+                        ? _c("span", [
+                            _vm._v(
+                              "\n                        Create Publication\n                    "
+                            )
+                          ])
+                        : _c("span", [
+                            _vm._v(
+                              "\n                        Update Publication\n                    "
+                            )
+                          ])
+                    ]
+                  )
+                : _c(
+                    "button",
+                    {
+                      staticClass:
+                        "block w-full bg-blue-200 text-white font-bold py-2 px-4 rounded mt-5",
+                      attrs: { disabled: "" }
+                    },
+                    [
+                      _vm._v(
+                        "\n                    Uploading...\n                "
+                      )
+                    ]
+                  ),
               _vm._v(" "),
               !_vm.newPublication
                 ? _c(
@@ -51322,22 +51453,22 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "border-t-4 border-gray-400 my-4 pt-4" },
+    {},
     [
-      _vm._l(_vm.children, function(publication) {
-        return _c(
-          "div",
-          {
-            key: publication.id,
-            staticClass:
-              "w-full sm:w-1/2 md:w-1/3 lg:w-1/4 inline-block p-2 text-gray-100"
-          },
-          [
-            _c(
-              "span",
+      _c(
+        "div",
+        {
+          staticClass:
+            "border-t-4 border-gray-400 my-4 pt-4 flex align-top items-stretch"
+        },
+        [
+          _vm._l(_vm.children, function(publication) {
+            return _c(
+              "div",
               {
+                key: publication.id,
                 staticClass:
-                  "block bg-gray-600 hover:bg-gray-700 rounded shadow p-4 relative",
+                  "relative w-full sm:w-1/2 md:w-1/3 lg:w-1/4 inline-block p-2 text-gray-100",
                 class: {
                   "shadow-outline": _vm.isActivePublication(publication)
                 },
@@ -51348,78 +51479,124 @@ var render = function() {
                 }
               },
               [
+                _c("div", {}, [
+                  _c("img", {
+                    attrs: {
+                      src: publication.publicationable.thumbnail,
+                      alt: ""
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _vm._m(0, true),
+                _vm._v(" "),
                 _c(
                   "div",
                   {
-                    staticClass:
-                      "text-2xl mb-2 h-16 overflow-hidden text-center"
+                    staticClass: "block absolute top-0 bottom-0 left-0 right-0"
                   },
-                  [_vm._v(" " + _vm._s(publication.title) + " ")]
-                ),
-                _vm._v(" "),
-                _vm.isActivePublication(publication)
-                  ? _c(
-                      "span",
-                      {
-                        staticClass:
-                          "clickable absolute bottom-0 left-0 right-0 text-center p-2",
-                        on: {
-                          click: function($event) {
-                            return _vm.editPublication(publication)
-                          }
-                        }
-                      },
-                      [_vm._v("\n                Edit\n            ")]
-                    )
-                  : _vm._e()
+                  [
+                    _c("div", { staticClass: "w-full h-full" }, [
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "text-2xl mb-2 h-16 overflow-hidden text-center p-10"
+                        },
+                        [_vm._v(" " + _vm._s(publication.title) + " ")]
+                      ),
+                      _vm._v(" "),
+                      _vm.isActivePublication(publication)
+                        ? _c(
+                            "span",
+                            {
+                              staticClass:
+                                "clickable absolute bottom-0 left-0 right-0 text-center p-10"
+                            },
+                            [
+                              _c(
+                                "span",
+                                {
+                                  staticClass:
+                                    "px-6 py-1 bg-white hover:bg-gray-200 text-black rounded shadow",
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.editPublication(publication)
+                                    }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                            edit\n                        "
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        : _vm._e()
+                    ])
+                  ]
+                )
               ]
             )
-          ]
-        )
-      }),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass:
-            "w-full sm:w-1/2 md:w-1/3 lg:w-1/4 inline-block p-2 text-gray-100"
-        },
-        [
+          }),
+          _vm._v(" "),
           _c(
-            "span",
+            "div",
             {
               staticClass:
-                "block bg-gray-300 hover:bg-gray-700 text-gray-700 hover:text-white rounded shadow p-4",
-              on: { click: _vm.addPublication }
+                "relative inline-block p-2 text-black hover:bg-gray-200"
             },
             [
               _c(
                 "div",
                 {
                   staticClass:
-                    "text-2xl mb-2 h-16 overflow-hidden text-center clickable"
+                    "p-2 flex flex-col items-center justify-center p-12  clickable",
+                  on: { click: _vm.addPublication }
                 },
                 [
-                  _vm._v(
-                    "\n                Voeg een publicatie toe\n            "
-                  )
+                  _c("i", { staticClass: "material-icons md-3" }, [
+                    _vm._v("\n                    add_circle\n                ")
+                  ]),
+                  _vm._v(" "),
+                  _c("span", [_vm._v("Voeg publicatie toe")])
                 ]
               )
             ]
           )
-        ]
+        ],
+        2
       ),
       _vm._v(" "),
       _vm.activePublication.id !== null && _vm.children.length > 0
         ? _c("publication-children", {
             attrs: { publication: _vm.activePublication, project: _vm.project }
           })
-        : _vm._e()
+        : _vm._e(),
+      _vm._v(" "),
+      _c("span", { staticClass: "text-gray-100" }, [_vm._v(".")])
     ],
-    2
+    1
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "p-2 absolute top-0 bottom-0 left-0 right-0" },
+      [
+        _c("div", {
+          staticClass:
+            "w-full h-full bg-gray-600 hover:bg-blue-900 opacity-75 hover:opacity-100"
+        })
+      ]
+    )
+  }
+]
 render._withStripped = true
 
 
@@ -51458,47 +51635,77 @@ var render = function() {
         "div",
         {
           staticClass:
-            "w-full sm:w-1/2 md:w-1/3 lg:w-1/4 inline-block p-2 text-gray-100"
+            "relative w-full sm:w-1/2 md:w-1/3 lg:w-1/4 inline-block p-2 text-gray-100"
         },
         [
+          _c("div", {}, [
+            _c("img", {
+              attrs: {
+                src:
+                  _vm.project.entrypoint.publication.publicationable.thumbnail,
+                alt: ""
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _vm._m(0),
+          _vm._v(" "),
           _c(
-            "span",
-            {
-              staticClass:
-                "block bg-gray-600 hover:bg-gray-700 rounded shadow p-4 shadow-outline"
-            },
+            "div",
+            { staticClass: "block absolute top-0 bottom-0 left-0 right-0" },
             [
-              _c("span", {
-                staticClass: "icons flex flex-row-reverse pb-4 text-gray-400"
-              }),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass: "text-2xl mb-2 h-16 overflow-hidden text-center"
-                },
-                [
-                  _vm._v(
-                    " " + _vm._s(_vm.project.entrypoint.publication.title) + " "
-                  )
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "span",
-                {
-                  staticClass:
-                    "clickable absolute bottom-0 left-0 right-0 text-center p-2",
-                  on: {
-                    click: function($event) {
-                      return _vm.editPublication(
-                        _vm.project.entrypoint.publication
-                      )
+              _c("div", { staticClass: "w-full h-full" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "text-2xl mb-2 h-16 overflow-hidden text-center p-10"
+                  },
+                  [
+                    _vm._v(
+                      " " +
+                        _vm._s(_vm.project.entrypoint.publication.title) +
+                        " "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "span",
+                  {
+                    staticClass:
+                      "clickable absolute bottom-0 left-0 right-0 text-center p-10",
+                    on: {
+                      click: function($event) {
+                        return _vm.editPublication(
+                          _vm.project.entrypoint.publication
+                        )
+                      }
                     }
-                  }
-                },
-                [_vm._v("\n                Edit\n            ")]
-              )
+                  },
+                  [
+                    _c(
+                      "span",
+                      {
+                        staticClass:
+                          "px-6 py-1 bg-white hover:bg-gray-200 text-black rounded shadow",
+                        on: {
+                          click: function($event) {
+                            return _vm.editPublication(
+                              _vm.project.entrypoint.publication
+                            )
+                          }
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\n                        Edit\n                    "
+                        )
+                      ]
+                    )
+                  ]
+                )
+              ])
             ]
           )
         ]
@@ -51514,7 +51721,23 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "p-2 absolute top-0 bottom-0 left-0 right-0" },
+      [
+        _c("div", {
+          staticClass:
+            "w-full h-full bg-gray-600 hover:bg-blue-900 opacity-75 hover:opacity-100"
+        })
+      ]
+    )
+  }
+]
 render._withStripped = true
 
 

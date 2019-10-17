@@ -14,20 +14,40 @@ class Video extends Model
         return $this->morphOne(Publication::class, 'publicationable');
     }
 
-    public static function registerFile($file)
+    public static function registerFile($videofile, $thumbnail)
     {
         $video = Video::create([]);
 
-//        $image_name = $file->getRealPath();;
+//        $image_name = $videofile->getRealPath();;
 //
 //        Cloudder::uploadVideo($image_name, null);
 
 
-        $file->storeAs('public/videos/' . $video->id . '/', $file->getClientOriginalName());
+        $videofile->storeAs('public/videos/' . $video->id . '/', $videofile->getClientOriginalName());
+        $video->link = '/storage/videos/' . $video->id . '/' . $videofile->getClientOriginalName();
 
-        $video->link = '/storage/videos/' . $video->id . '/' . $file->getClientOriginalName();
+        $thumbnail->storeAs('public/videos/' . $video->id . '/', $thumbnail->getClientOriginalName());
+        $video->thumbnail = '/storage/videos/' . $video->id . '/' . $thumbnail->getClientOriginalName();
+
         $video->save();
 
         return $video;
+    }
+
+    public static function updateVideoFiles(Video $video, $videofile, $thumbnail)
+    {
+        if ( ! is_null($videofile) &&
+            $video->link != '/storage/videos/' . $video->id . '/' . $videofile->getClientOriginalName()
+        ){
+            $videofile->storeAs('public/videos/' . $video->id . '/', $videofile->getClientOriginalName());
+            $video->link = '/storage/videos/' . $video->id . '/' . $videofile->getClientOriginalName();
+        }
+
+        if ( ! is_null($thumbnail) &&
+            $video->thumbnail != '/storage/videos/' . $video->id . '/' . $thumbnail->getClientOriginalName()
+        ){
+            $thumbnail->storeAs('public/videos/' . $video->id . '/', $thumbnail->getClientOriginalName());
+            $video->thumbnail = '/storage/videos/' . $video->id . '/' . $thumbnail->getClientOriginalName();
+        }
     }
 }

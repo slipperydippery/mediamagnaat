@@ -35,11 +35,13 @@ class PublicationController extends Controller
     public function store(Request $request)
     {
         $publicationinput = json_decode($request->publication);
-        $file = $request->file('file');
+        $videofile = $request->file('videofile');
+
+        $thumbnail = $request->file('thumbnail');
 
         $project = Project::find( $publicationinput->project_id );
 
-        $video = Video::registerFile($file);
+        $video = Video::registerFile($videofile, $thumbnail);
 
         $video->publication()->create([
             'title'                     => $publicationinput->title,
@@ -75,15 +77,18 @@ class PublicationController extends Controller
      * @param  int  Publication $publication
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Publication $publication)
+    public function updatepublication(Request $request, Publication $publication)
     {
-        $publication->title = $request->input('publication.title');
-        $publication->description = $request->input('publication.description');
+        $publicationinput = json_decode($request->publication);
+        $video = Video::find($publicationinput->id);
+        $videofile = $request->file('videofile');
+        $thumbnail = $request->file('thumbnail');
+
+        $publication->title = $publicationinput->title;
+        $publication->description = $publicationinput->description;
         $publication->save();
 
-
-        $publication->publicationable->link = $request->input('publication.publicationable.link');
-        $publication->publicationable->save();
+        Video::updateVideoFiles($video, $videofile, $thumbnail);
 
 
         return $publication;
