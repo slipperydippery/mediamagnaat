@@ -20,4 +20,9 @@ class Project extends Model
     {
         return $this->hasMany(Publication::class);
     }
+
+    public function layout()
+    {
+        return $this->hasOne(Layout::class);
+    }
 }

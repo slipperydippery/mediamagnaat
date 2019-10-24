@@ -46,7 +46,9 @@ class ProjectController extends Controller
             'public'        => $request->input('project.public'),
         ]);
 
-        $project->entrypoint()->create( [] );
+        $project->layout()->create();
+
+        $project->entrypoint()->create();
 
         return $project;
     }

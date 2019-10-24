@@ -46,7 +46,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        $project = Project::with('entrypoint.publication.publicationable', 'publications.publicationable')->find($project->id);
+        $project = Project::with('entrypoint.publication.publicationable', 'publications.publicationable', 'layout')->find($project->id);
         return view('project.show', compact('project'));
     }
 

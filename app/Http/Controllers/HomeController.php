@@ -26,7 +26,7 @@ class HomeController extends Controller
     public function index()
     {
         if( Auth::check() ){
-            $projects = Auth::user()->projects()->get();
+            $projects = Auth::user()->projects()->with('entrypoint.publication.publicationable', 'publications.publicationable')->get();
             return view('dashboard', compact('projects'));
         }
         return view('welcome');

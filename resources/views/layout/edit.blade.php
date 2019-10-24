@@ -48,18 +48,6 @@
             </div>
         </div>
     </div>
-    <new-publication-button inline-template>
-        <button class="inline-block w-full px-8 lg:w-auto bg-gray-200 hover:bg-blue-700 text-gray-700 hover:text-white font-bold py-2 rounded"
-                @click="newPublicationInModal"
-        >
-            Voeg een publicatie toe
-        </button>
-    </new-publication-button>
-
-    <publications-tree
-        :project = " {{ json_encode($project) }} "
-    >
-    </publications-tree>
 
 
 @endsection

@@ -57,7 +57,8 @@ class LayoutController extends Controller
      */
     public function edit(Layout $layout)
     {
-        //
+        $project = $layout->project;
+        return view('layout.edit', compact('layout', 'project'));
     }
 
     /**

@@ -3,7 +3,7 @@
 @section('content')
     <div class="container md:flex md:flex-row-reverse mx-auto mt-6">
         <div class="">
-            <img src="/img/feature.svg" class="w-full" alt="">
+            <img src="/img/page.svg" class="w-full" alt="">
         </div>
         <div class="px-4 py-2 lg:w-1/2 text-center lg:text-left text-gray-600">
             <div class="lg:pl-24 lg:py-16">

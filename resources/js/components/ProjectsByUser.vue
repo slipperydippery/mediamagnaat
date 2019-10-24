@@ -18,7 +18,7 @@
         computed: {
             chunkedDecks () {
                 return _.chunk(this.projects,4)
-            }
+            },
         },
 
         methods: {
@@ -36,6 +36,13 @@
 
             fontSize(string) {
                 return ((Math.round((10 / Math.pow(string.length, 0.4)) * 10))/ 10) ;
+            },
+
+            thumbnail(project) {
+                if (project.entrypoint.publication != null) {
+                    return project.entrypoint.publication.publicationable.thumbnail
+                }
+                return '/img/page.svg'
             }
         }
     }

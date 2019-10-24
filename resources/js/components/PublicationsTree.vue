@@ -3,7 +3,7 @@
         <h2 class="ml-2 text-xl sm:text-base md:text-xl lg:text-2xl xl:text-3xl antialiased tracking-tight font-semibold text-gray-700 underline">
             Video's in jouw project
         </h2>
-        <div class="relative w-full sm:w-1/2 md:w-1/3 lg:w-1/4 inline-block p-2 text-gray-100">
+        <div class="relative w-full sm:w-1/2 md:w-1/3 lg:w-1/4 inline-block p-2 text-gray-100" v-if="project.entrypoint.publication != null">
             <div class="">
                 <img class="" :src="project.entrypoint.publication.publicationable.thumbnail" alt="">
             </div>
@@ -29,6 +29,7 @@
         <publication-children
             :publication = project.entrypoint.publication
             :project = project
+            v-if="project.entrypoint.publication != null"
         >
         </publication-children>
     </div>
