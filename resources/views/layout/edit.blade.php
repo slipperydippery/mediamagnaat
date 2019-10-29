@@ -273,7 +273,7 @@
                     <input type="number" class="form-input mt-1" v-model="example.cardnumber">
                 </label>
 
-                <div class="fixed right-0 bottom-20 right-20 h-xs9 sm:h-sm9 md:h-md9 lg:h-md9 xl:h-xl9 w-xs16 sm:w-sm16 md:w-md16 lg:w-md16 xl:w-xl16">
+                <div class="videooverlay fixed right-0 bottom-20 right-20 h-xs9 sm:h-sm9 md:h-md9 lg:h-md9 xl:h-xl9 w-xs16 sm:w-sm16 md:w-md16 lg:w-md16 xl:w-xl16">
                     <img :src="background" alt="" class="object-cover h-full w-full">
                     <div
                         class="absolute top-0 left-0 bottom-0 right-0 flex flex-col items-center justify-center"
@@ -298,18 +298,24 @@
                         </div>
                         <div class="flex-1 flex py-5 overflow-hidden items-center">
                             <div class="w-1/3 mr-4" :class="{'h-full': layout.sidebar_fullheight}" v-if="layout.sidebar_show">
-                                <div :class="{'h-full': layout.sidebar_fullheight}"
+                                <div class="overflow-hidden"
+                                    :class="{'h-full': layout.sidebar_fullheight}"
                                     :style="{
                                     background: layout.sidebar_background_color,
                                     color: layout.sidebar_text_color,
                                     'font-size': layout.sidebar_description_size * .65 + '%',
                                     padding: layout.sidebar_padding_y + 'px ' + layout.sidebar_padding_x + 'px',
                                 }">
-                                    Mi massa leo purus metus portaest ipsum dolor adipiscing vivamus lorem varius accumsan nunc molestie elit ex arcu lacus eget sed erat dolor morbi quis.
-
-                                    Nunc interdum suspendisse consectetur tortor eu leo ex vivamus morbi tristique cursus purus elit vel magna sed nisl adipiscing et maecenas gravida purus sit nisi.
-
-                                    Adipiscing adipiscing nisl maecenas eget molestie portaest urna sed placerat varius cursus ac eu quisque ac congue euismod aliquam sit ipsum commodo euismod facilisis rutrum.
+                                    @php
+                                    $string = 'Mi **massa** leo purus metus portaest ipsum dolor adipiscing
+\
+vivamus lorem varius accumsan nunc molestie elit ex arcu lacus eget sed erat dolor morbi quis.
+\
+Nunc interdum suspendisse consectetur tortor eu leo ex vivamus morbi tristique cursus purus elit vel magna sed nisl adipiscing et maecenas gravida purus sit nisi.
+ \
+[Im an inline-style link](https://www.google.com) nisl maecenas eget molestie portaest urna sed placerat varius cursus ac eu quisque ac congue euismod aliquam sit ipsum commodo euismod facilisis rutrum.'
+                                    @endphp
+                                    <vue-markdown source="<?= $string ?>"></vue-markdown>
 
                                 </div>
                             </div>
@@ -321,7 +327,7 @@
                                 <div class="inline-block overflow-hidden clickable"
                                      v-for="card in Number(example.cardnumber)"
                                     :style="{
-                                            padding: '0 ' + layout.card_margin_x / 10 + '%' + layout.card_margin_y / 10 + '%',
+                                            padding: '0px 0px ' + layout.card_margin_y / 10 + '%' + layout.card_margin_x / 10 + '%',
                                             width: (100 / layout.cols) + '%'
                                             }"
                                 >

@@ -120,6 +120,11 @@
   opacity: 0.7;
 }
 
+.videooverlay a {
+  text-decoration: underline;
+  color: blud;
+}
+
 .verte {
   background: #eee;
   border: 1px solid black;

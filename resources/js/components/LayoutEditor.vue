@@ -1,6 +1,12 @@
 <script>
+    import VueMarkdown from 'vue-markdown';
+
     export default {
         name: "LayoutEditor",
+
+        components: {
+            VueMarkdown
+        },
 
         props: [
             'inputlayout'
