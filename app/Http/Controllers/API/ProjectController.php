@@ -50,6 +50,8 @@ class ProjectController extends Controller
 
         $project->entrypoint()->create();
 
+        $project = Project::with('entrypoint')->find($project->id);
+
         return $project;
     }
 

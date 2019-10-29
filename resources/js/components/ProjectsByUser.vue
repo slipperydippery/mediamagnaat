@@ -23,8 +23,9 @@
 
         methods: {
             addProject(project) {
-                this.projects.push(project);
-                this.$forceUpdate();
+                console.log('adding project')
+                this.projects.push(project)
+                this.$forceUpdate()
             },
 
             cardCounter(project) {

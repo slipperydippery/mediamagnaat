@@ -3,7 +3,8 @@
         name: "PlayerContainer",
 
         props: [
-            'project'
+            'project',
+            'layout'
         ],
 
         data() {
@@ -55,6 +56,10 @@
 
             setActivePublication(publication) {
                 this.activePublication = publication
+            },
+
+            stringlimit(str) {
+                return str.substr(1, this.layout.description_length) + '...';
             }
         }
     }

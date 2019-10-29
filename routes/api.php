@@ -22,6 +22,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::apiResources([
     'project' 		=> 'API\ProjectController',
     'publication'   => 'API\PublicationController',
+    'layout'        => 'API\LayoutController'
 ]);
 
 Route::post('/updatepublication/{publication}', 'API\PublicationController@updatepublication');

@@ -10,6 +10,11 @@ window.Vue = require('vue');
 import PortalVue from 'portal-vue'
 Vue.use(PortalVue);
 
+import Verte from 'verte';
+import 'verte/dist/verte.css';
+Vue.component('verte', Verte);
+
+
 import VueVideoPlayer from 'vue-video-player'
 
 // require videojs style
@@ -46,6 +51,8 @@ Vue.component('publication-children', require('./components/PublicationChildren.
 Vue.component('player-container', require('./components/PlayerContainer.vue').default);
 Vue.component('show-video', require('./components/ShowVideo.vue').default);
 
+Vue.component('layout-editor', require('./components/LayoutEditor.vue').default);
+Vue.component('video-display', require('./components/VideoDisplay.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
