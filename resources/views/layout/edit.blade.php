@@ -273,13 +273,13 @@
                     <input type="number" class="form-input mt-1" v-model="example.cardnumber">
                 </label>
 
-                <div class="videooverlay fixed right-0 bottom-20 right-20 h-xs9 sm:h-sm9 md:h-md9 lg:h-md9 xl:h-xl9 w-xs16 sm:w-sm16 md:w-md16 lg:w-md16 xl:w-xl16">
-                    <img :src="background" alt="" class="object-cover h-full w-full">
+                <div class="fixed right-0 bottom-20 right-20 h-xs9 sm:h-sm9 md:h-md9 lg:h-md9 xl:h-xl9 w-xs16 sm:w-sm16 md:w-md16 lg:w-md16 xl:w-xl16" >
+                    <img :src="background" alt="" class="object-cover h-full w-full" ref="videooverlay">
                     <div
                         class="absolute top-0 left-0 bottom-0 right-0 flex flex-col items-center justify-center"
                         :style="{ background: layout.bg_color,
                                 color: layout.text_color,
-                                padding: layout.padding_y + '%' + layout.padding_x + '%'
+                            padding: inPixels(layout.padding_y) + inPixels(layout.padding_x)
                                  }"
                     >
                         <div class="w-full" v-if="layout.title_show">
@@ -328,7 +328,8 @@ Nunc interdum suspendisse consectetur tortor eu leo ex vivamus morbi tristique c
                                      v-for="card in Number(example.cardnumber)"
                                     :style="{
                                             padding: '0px 0px ' + layout.card_margin_y / 10 + '%' + layout.card_margin_x / 10 + '%',
-                                            width: (100 / layout.cols) + '%'
+                                            width: (100 / layout.cols) + '%',
+                                            'max-height': 30 + '%'
                                             }"
                                 >
                                     <div class="overflow-hidden relative"

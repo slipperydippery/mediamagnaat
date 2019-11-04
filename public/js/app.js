@@ -1882,15 +1882,19 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     this.layout = this.inputlayout;
     this.background = this.randomImage();
+    console.log(this.videoHeight);
     var i;
 
     for (i = 0; i < 30; i++) {
-      console.log('pusing ' + i);
       this.backgrounds.push(this.randomImage());
     }
   },
   watch: {},
-  computed: {},
+  computed: {
+    videoHeight: function videoHeight() {
+      return this.$refs.videooverlay.clientHeight;
+    }
+  },
   methods: {
     randomImage: function randomImage() {
       return '/img/thumbnails/thumbnail_' + Math.ceil(Math.random() * 35) + '.jpg';
@@ -1917,7 +1921,17 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     stringlimit: function stringlimit(str) {
+      if (str.length < this.layout.description_length) {
+        return str;
+      }
+
       return str.substr(1, this.layout.description_length) + '...';
+    },
+    inPixels: function inPixels(value) {
+      // console.log(this.videoHeight)
+      console.log(this.$refs.videooverlay.clientHeight);
+      return '100px';
+      return Math.ceil(value / this.videoHeight * 100) + 'px';
     }
   }
 });
@@ -91315,8 +91329,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\zeronothingzero\Code\mediamagnaat\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\zeronothingzero\Code\mediamagnaat\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /Users/silvernitrate/Code/mediamagnaat/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /Users/silvernitrate/Code/mediamagnaat/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ }),

@@ -27,9 +27,9 @@
         mounted() {
             this.layout = this.inputlayout
             this.background = this.randomImage()
+            console.log(this.videoHeight)
             var i;
             for (i = 0; i < 30; i++) {
-                console.log('pusing ' + i)
                 this.backgrounds.push(this.randomImage())
             }
         },
@@ -38,6 +38,9 @@
         },
 
         computed: {
+            videoHeight() {
+                return this.$refs.videooverlay.clientHeight;
+            }
         },
 
         methods: {
@@ -70,9 +73,18 @@
             },
 
             stringlimit(str) {
+                if (str.length < this.layout.description_length) {
+                    return str
+                }
                 return str.substr(1, this.layout.description_length) + '...';
-            }
+            },
 
+            inPixels(value){
+                // console.log(this.videoHeight)
+                console.log(this.$refs.videooverlay.clientHeight)
+                return '100px'
+                return Math.ceil((value / this.videoHeight) * 100) + 'px'
+            }
         }
     }
 </script>
