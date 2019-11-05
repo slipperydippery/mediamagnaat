@@ -85,6 +85,16 @@
                 </label>
 
                 <label class="block w-full flex items-center">
+                    <span class="text-gray-700 w-2/3">Padding breedte</span>
+                    <input type="number" class="form-input mt-1 w-1/3" v-model="layout.title_padding_x" @input="updateLayout">
+                </label>
+
+                <label class="block w-full flex items-center">
+                    <span class="text-gray-700 w-2/3">Padding hoogte</span>
+                    <input type="number" class="form-input mt-1 w-1/3" v-model="layout.title_padding_y" @input="updateLayout">
+                </label>
+
+                <label class="block w-full flex items-center">
                     <span class="text-gray-700 w-2/3">Achtergrond</span>
                     <verte v-model="layout.title_background_color" @input="updateLayout"></verte>
                 </label>
@@ -279,7 +289,7 @@
                         class="absolute top-0 left-0 bottom-0 right-0 flex flex-col items-center justify-center"
                         :style="{ background: layout.bg_color,
                                 color: layout.text_color,
-                            padding: inPixels(layout.padding_y) + inPixels(layout.padding_x)
+                                padding: inPixels(layout.padding_y) + ' ' + inPixels(layout.padding_x)
                                  }"
                     >
                         <div class="w-full" v-if="layout.title_show">
@@ -288,23 +298,23 @@
                                  'top-0': ! layout.title_bottom, 'text-center mx-auto': layout.title_center}"
                                  :style="{
                                     background: layout.title_background_color,
-                                    padding: layout.title_padding_y + '%' + layout.title_padding_x + '%',
+                                    padding: inPixels(layout.title_padding_y) + ' ' + inPixels(layout.title_padding_x),
                                     color: layout.title_text_color,
-                                    'font-size': layout.title_size * .65 + '%',
+                                    'font-size': inPixels(layout.title_size),
                                 }"
                             >
                                 Titel van deze video
                             </div>
                         </div>
-                        <div class="flex-1 flex py-5 overflow-hidden items-center">
+                        <div class="flex-1 flex py-5 items-center">
                             <div class="w-1/3 mr-4" :class="{'h-full': layout.sidebar_fullheight}" v-if="layout.sidebar_show">
                                 <div class="overflow-hidden"
                                     :class="{'h-full': layout.sidebar_fullheight}"
                                     :style="{
                                     background: layout.sidebar_background_color,
                                     color: layout.sidebar_text_color,
-                                    'font-size': layout.sidebar_description_size * .65 + '%',
-                                    padding: layout.sidebar_padding_y + 'px ' + layout.sidebar_padding_x + 'px',
+                                    'font-size': inPixels(layout.sidebar_description_size),
+                                    padding: inPixels(layout.sidebar_padding_y) + ' ' + inPixels(layout.sidebar_padding_x),
                                 }">
                                     @php
                                     $string = 'Mi **massa** leo purus metus portaest ipsum dolor adipiscing
@@ -321,23 +331,23 @@ Nunc interdum suspendisse consectetur tortor eu leo ex vivamus morbi tristique c
                             </div>
                             <div :class="{'w-2/3': layout.sidebar_show}"
                                 :style="{
-                                    'margin': '0 -' + layout.card_margin_x / 10 + '%'
+                                    'margin': '0 -' + inPixels(layout.card_margin_x)
                                 }"
                             >
-                                <div class="inline-block overflow-hidden clickable"
+                                <div class="inline-block clickable"
                                      v-for="card in Number(example.cardnumber)"
                                     :style="{
-                                            padding: '0px 0px ' + layout.card_margin_y / 10 + '%' + layout.card_margin_x / 10 + '%',
+                                            padding: '0px 0px ' + inPixels(layout.card_margin_y) + ' ' + inPixels(layout.card_margin_x),
                                             width: (100 / layout.cols) + '%',
                                             'max-height': 30 + '%'
                                             }"
                                 >
-                                    <div class="overflow-hidden relative"
+                                    <div class="relative"
                                          :style="{
                                             'border-width': layout.border_width + 'px',
                                             'border-color': layout.border_color,
                                             'border-radius': layout.border_radius + 'px',
-                                            'box-shadow': '0 0 ' + layout.card_shadow_size + 'px ' + layout.card_shadow_color,
+                                            'box-shadow': '0 0 ' + inPixels(layout.card_shadow_size) + ' ' + layout.card_shadow_color,
                                          }"
                                     >
                                         <img :src="backgrounds[card]" alt="" class="object-cover h-full w-full">
@@ -351,7 +361,7 @@ Nunc interdum suspendisse consectetur tortor eu leo ex vivamus morbi tristique c
                                             <h3 class="truncate font-semibold"
                                                 v-if="layout.info_title_show"
                                                 :style="{
-                                                    'font-size': layout.info_title_size * .65 + '%',
+                                                    'font-size': inPixels(layout.info_title_size),
                                                     'color': layout.info_title_color
                                                 }"
                                             >
@@ -360,7 +370,7 @@ Nunc interdum suspendisse consectetur tortor eu leo ex vivamus morbi tristique c
                                             <p class="relative"
                                                 v-if="layout.description_show"
                                                 :style="{
-                                                    'font-size': layout.description_size * .65 + '%',
+                                                    'font-size': inPixels(layout.description_size),
                                                     'color': layout.description_color
                                                 }"
                                             >
@@ -376,7 +386,7 @@ Nunc interdum suspendisse consectetur tortor eu leo ex vivamus morbi tristique c
                                  :class="{'w-full': layout.back_fullwidth, 'w-auto': ! layout.back_fullwidth, 'absolute left-0': layout.back_absolute, 'bottom-0': layout.back_bottom, 'top-0': ! layout.back_bottom}"
                                  :style="{
                                     background: layout.back_background_color,
-                                    padding: layout.back_padding_y + '%' + layout.back_padding_x + '%',
+                                    padding: inPixels(layout.back_padding_y) + ' ' + inPixels(layout.back_padding_x),
                                     color: layout.back_text_color,
                                 }"
                             >

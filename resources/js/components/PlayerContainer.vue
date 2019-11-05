@@ -16,11 +16,13 @@
                         link: null
                     },
                 },
+                videoHeight: 100
             }
         },
 
         mounted() {
             this.activePublication = this.project.entrypoint.publication
+            this.setVideoHeight()
         },
 
         computed: {
@@ -48,6 +50,22 @@
         },
 
         methods: {
+            setVideoHeight() {
+                var home = this
+                setTimeout( function() {
+                    if( home.$refs.videooverlay != undefined) {
+                        home.videoHeight = home.$refs.videooverlay.clientHeight
+                    }
+                    home.setVideoHeight()
+                }, 500 )
+            },
+
+            inPixels(value){
+                if( value != undefined ){
+                    return (value * (100 / this.videoHeight)) + 'px'
+                }
+            },
+
             togglePlayPause() {
                 console.log('toggling from overlay')
                 this.playing = ! this.playing

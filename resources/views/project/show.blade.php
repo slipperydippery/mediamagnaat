@@ -18,12 +18,12 @@
             </show-video>
 
             <div class="fixed right-0 bottom-0 left-0 top-0 " v-if="! playing">
-                <img :src="activePublication.publicationable.thumbnail" alt="" class="object-cover h-full w-full">
+                <img :src="activePublication.publicationable.thumbnail" alt="" class="object-cover h-full w-full" ref="videooverlay">
                 <div
                     class="absolute top-0 left-0 bottom-0 right-0 flex flex-col items-center justify-center"
                     :style="{ background: layout.bg_color,
                                 color: layout.text_color,
-                                padding: layout.padding_y + '%' + layout.padding_x + '%'
+                                padding: inPixels(layout.padding_y) + ' ' + inPixels(layout.padding_x)
                                  }"
                     @click.self="togglePlayPause"
                 >
@@ -33,62 +33,88 @@
                                  'top-0': ! layout.title_bottom, 'text-center mx-auto': layout.title_center}"
                              :style="{
                                     background: layout.title_background_color,
-                                    padding: layout.title_padding_y + '%' + layout.title_padding_x + '%',
+                                    padding: inPixels(layout.title_padding_y) + ' ' + inPixels(layout.title_padding_x),
                                     color: layout.title_text_color,
-                                    'font-size': layout.title_size + '%',
+                                    'font-size': inPixels(layout.title_size),
                                 }"
                         >
                             @{{ activePublication.title  }}
                         </div>
                     </div>
-                    <div class=""
-                         :style="{
-                                'margin': '0 -' + layout.card_margin_x / 10 + '%'
-                            }"
-                         @click.self="togglePlayPause"
-                    >
-                        <div class="inline-block overflow-hidden clickable"
-                             v-for="child in children"
-                             :style="{
-                                        padding: layout.card_margin_y / 10 + '%' + layout.card_margin_x / 10 + '%',
-                                        width: (100 / layout.cols) + '%'
-                                        }"
-                             @click="setActivePublication(child)"
-                        >
-                            <div class="overflow-hidden relative"
+
+
+
+                    <div class="flex-1 flex py-5 items-center">
+                        <div class="w-1/3 mr-4" :class="{'h-full': layout.sidebar_fullheight}" v-if="layout.sidebar_show">
+                            <div class="overflow-hidden"
+                                 :class="{'h-full': layout.sidebar_fullheight}"
                                  :style="{
-                                        'border-width': layout.border_width + 'px',
-                                        'border-color': layout.border_color,
-                                        'border-radius': layout.border_radius + 'px',
-                                        'box-shadow': '0 0 ' + layout.card_shadow_size + 'px ' + layout.card_shadow_color,
-                                     }"
+                                    background: layout.sidebar_background_color,
+                                    color: layout.sidebar_text_color,
+                                    'font-size': inPixels(layout.sidebar_description_size),
+                                    padding: inPixels(layout.sidebar_padding_y) + ' ' + inPixels(layout.sidebar_padding_x),
+                                }">
+                                @php
+                                    $string = 'Mi **massa** leo purus metus portaest ipsum dolor adipiscing
+\
+vivamus lorem varius accumsan nunc molestie elit ex arcu lacus eget sed erat dolor morbi quis.
+\
+Nunc interdum suspendisse consectetur tortor eu leo ex vivamus morbi tristique cursus purus elit vel magna sed nisl adipiscing et maecenas gravida purus sit nisi.
+ \
+[Im an inline-style link](https://www.google.com) nisl maecenas eget molestie portaest urna sed placerat varius cursus ac eu quisque ac congue euismod aliquam sit ipsum commodo euismod facilisis rutrum.'
+                                @endphp
+                                <vue-markdown source="<?= $string ?>"></vue-markdown>
+
+                            </div>
+                        </div>
+                        <div :class="{'w-2/3': layout.sidebar_show}"
+                             :style="{
+                                    'margin': '0 -' + inPixels(layout.card_margin_x)
+                                }"
+                        >
+                            <div class="inline-block clickable"
+                                 v-for="child in children"
+                                 :style="{
+                                            padding: '0px 0px ' + inPixels(layout.card_margin_y) + ' ' + inPixels(layout.card_margin_x),
+                                            width: (100 / layout.cols) + '%',
+                                            'max-height': 30 + '%'
+                                            }"
                             >
-                                <img :src="child.publicationable.thumbnail" alt="" class="object-cover h-full w-full">
-                                <div class="bg-white absolute bottom-0 w-full"
+                                <div class="relative"
                                      :style="{
-                                            'height': layout.info_height + '%',
-                                            'padding': layout.info_padding_y + '%' + layout.info_padding_x + '%',
-                                            'background': layout.info_background_color,
+                                            'border-width': layout.border_width + 'px',
+                                            'border-color': layout.border_color,
+                                            'border-radius': layout.border_radius + 'px',
+                                            'box-shadow': '0 0 ' + inPixels(layout.card_shadow_size) + ' ' + layout.card_shadow_color,
                                          }"
                                 >
-                                    <h3 class="truncate font-semibold"
-                                        v-if="layout.info_title_show"
-                                        :style="{
-                                                'font-size': layout.info_title_size + '%',
-                                                'color': layout.info_title_color
-                                            }"
+                                    <img :src="child.publicationable.thumbnail" alt="" class="object-cover h-full w-full">
+                                    <div class="bg-white absolute bottom-0 w-full"
+                                         :style="{
+                                                'height': layout.info_height + '%',
+                                                'padding': layout.info_padding_y + '%' + layout.info_padding_x + '%',
+                                                'background': layout.info_background_color,
+                                             }"
                                     >
-                                        @{{ child.title }}
-                                    </h3>
-                                    <p class="relative"
-                                       v-if="layout.description_show"
-                                       :style="{
-                                                'font-size': layout.description_size + '%',
-                                                'color': layout.description_color
-                                            }"
-                                    >
-                                        @{{ stringlimit('Sit gravida maecenas tortor urna lorem euismod molestie enim tincidunt dolor ut sem leo enim nulla maecenas ipsum cursus vivamus rutrum bibendum nisi sed purus.') }}
-                                    </p>
+                                        <h3 class="truncate font-semibold"
+                                            v-if="layout.info_title_show"
+                                            :style="{
+                                                    'font-size': inPixels(layout.info_title_size),
+                                                    'color': layout.info_title_color
+                                                }"
+                                        >
+                                            @{{ child.title }}
+                                        </h3>
+                                        <p class="relative"
+                                           v-if="layout.description_show"
+                                           :style="{
+                                                    'font-size': inPixels(layout.description_size),
+                                                    'color': layout.description_color
+                                                }"
+                                        >
+                                            @{{ stringlimit('Sit gravida maecenas tortor urna lorem euismod molestie enim tincidunt dolor ut sem leo enim nulla maecenas ipsum cursus vivamus rutrum bibendum nisi sed purus.') }}
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -98,11 +124,9 @@
                              :class="{'w-full': layout.back_fullwidth, 'w-auto': ! layout.back_fullwidth, 'absolute left-0': layout.back_absolute, 'bottom-0': layout.back_bottom, 'top-0': ! layout.back_bottom}"
                              :style="{
                                     background: layout.back_background_color,
-                                    padding: layout.back_padding_y + '%' + layout.back_padding_x + '%',
+                                    padding: inPixels(layout.back_padding_y) + ' ' + inPixels(layout.back_padding_x),
                                     color: layout.back_text_color,
                                 }"
-                             v-if="parent"
-                             @click="setActivePublication(parent)"
                         >
                             @{{ layout.back_text }} <span v-if="layout.back_include_title"> @{{ parent.title }} </span>
                         </div>

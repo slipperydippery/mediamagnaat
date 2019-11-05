@@ -1876,49 +1876,52 @@ __webpack_require__.r(__webpack_exports__);
       example: {
         cardnumber: 8
       },
-      updating: false
+      updating: false,
+      videoHeight: 400
     };
   },
   mounted: function mounted() {
     this.layout = this.inputlayout;
     this.background = this.randomImage();
-    console.log(this.videoHeight);
     var i;
 
     for (i = 0; i < 30; i++) {
       this.backgrounds.push(this.randomImage());
     }
+
+    this.setVideoHeight();
   },
   watch: {},
-  computed: {
-    videoHeight: function videoHeight() {
-      return this.$refs.videooverlay.clientHeight;
-    }
-  },
+  computed: {},
   methods: {
+    setVideoHeight: function setVideoHeight() {
+      var home = this;
+      setTimeout(function () {
+        if (home.$refs.videooverlay != undefined) {
+          home.videoHeight = home.$refs.videooverlay.clientHeight;
+        }
+
+        home.setVideoHeight();
+      }, 500);
+    },
     randomImage: function randomImage() {
       return '/img/thumbnails/thumbnail_' + Math.ceil(Math.random() * 35) + '.jpg';
     },
     updateLayout: function updateLayout() {
-      console.log('updateLayout');
       var home = this;
 
       if (!this.updating) {
         this.updating = true;
         setTimeout(function () {
-          console.log('timeout');
           home.updating = false;
           home.patchLayout();
         }, 2000);
       }
     },
     patchLayout: function patchLayout() {
-      console.log('patching');
       axios.patch('/api/layout/' + this.layout.id, {
         layout: this.layout
-      }).then(function (response) {
-        console.log(response.data);
-      });
+      }).then(function (response) {});
     },
     stringlimit: function stringlimit(str) {
       if (str.length < this.layout.description_length) {
@@ -1928,10 +1931,11 @@ __webpack_require__.r(__webpack_exports__);
       return str.substr(1, this.layout.description_length) + '...';
     },
     inPixels: function inPixels(value) {
-      // console.log(this.videoHeight)
-      console.log(this.$refs.videooverlay.clientHeight);
-      return '100px';
-      return Math.ceil(value / this.videoHeight * 100) + 'px';
+      if (value != undefined) {
+        console.log(Math.ceil(value * 100 / this.videoHeight) + 'px');
+        return value * (100 / this.videoHeight) + 'px';
+        return Math.ceil(value * 100 / this.videoHeight) + 'px';
+      }
     }
   }
 });
@@ -2412,11 +2416,13 @@ __webpack_require__.r(__webpack_exports__);
         publicationable: {
           link: null
         }
-      }
+      },
+      videoHeight: 100
     };
   },
   mounted: function mounted() {
     this.activePublication = this.project.entrypoint.publication;
+    this.setVideoHeight();
   },
   computed: {
     children: function children() {
@@ -2447,6 +2453,21 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    setVideoHeight: function setVideoHeight() {
+      var home = this;
+      setTimeout(function () {
+        if (home.$refs.videooverlay != undefined) {
+          home.videoHeight = home.$refs.videooverlay.clientHeight;
+        }
+
+        home.setVideoHeight();
+      }, 500);
+    },
+    inPixels: function inPixels(value) {
+      if (value != undefined) {
+        return value * (100 / this.videoHeight) + 'px';
+      }
+    },
     togglePlayPause: function togglePlayPause() {
       console.log('toggling from overlay');
       this.playing = !this.playing;
@@ -91329,8 +91350,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/silvernitrate/Code/mediamagnaat/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Users/silvernitrate/Code/mediamagnaat/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\zeronothingzero\Code\mediamagnaat\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\zeronothingzero\Code\mediamagnaat\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ }),
