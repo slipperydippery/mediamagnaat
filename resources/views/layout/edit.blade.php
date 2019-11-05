@@ -342,7 +342,7 @@ Nunc interdum suspendisse consectetur tortor eu leo ex vivamus morbi tristique c
                                             'max-height': 30 + '%'
                                             }"
                                 >
-                                    <div class="relative"
+                                    <div class="relative overflow-hidden"
                                          :style="{
                                             'border-width': layout.border_width + 'px',
                                             'border-color': layout.border_color,
@@ -354,7 +354,7 @@ Nunc interdum suspendisse consectetur tortor eu leo ex vivamus morbi tristique c
                                         <div class="bg-white absolute bottom-0 w-full"
                                              :style="{
                                                 'height': layout.info_height + '%',
-                                                'padding': layout.info_padding_y + '%' + layout.info_padding_x + '%',
+                                                'padding': inPixels(layout.info_padding_y) + ' ' + inPixels(layout.info_padding_x),
                                                 'background': layout.info_background_color,
                                              }"
                                         >
@@ -388,6 +388,7 @@ Nunc interdum suspendisse consectetur tortor eu leo ex vivamus morbi tristique c
                                     background: layout.back_background_color,
                                     padding: inPixels(layout.back_padding_y) + ' ' + inPixels(layout.back_padding_x),
                                     color: layout.back_text_color,
+                                    'font-size': inPixels(layout.back_size),
                                 }"
                             >
                                 @{{ layout.back_text }} <span v-if="layout.back_include_title">Titel vorige video</span>

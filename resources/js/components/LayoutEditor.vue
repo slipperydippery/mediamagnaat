@@ -18,7 +18,7 @@
                 background: '',
                 backgrounds: [],
                 example: {
-                    cardnumber: 8
+                    cardnumber: 4
                 },
                 updating: false,
                 videoHeight: 400,
@@ -85,9 +85,7 @@
 
             inPixels(value){
                 if( value != undefined ){
-                    console.log( Math.ceil((value* 100) / this.videoHeight ) + 'px' )
-                    return (value * (100 / this.videoHeight)) + 'px'
-                    return Math.ceil((value * 100) / this.videoHeight) + 'px'
+                    return (value * (this.videoHeight / 1000)) + 'px'
                 }
             }
         }

@@ -54,16 +54,7 @@
                                     'font-size': inPixels(layout.sidebar_description_size),
                                     padding: inPixels(layout.sidebar_padding_y) + ' ' + inPixels(layout.sidebar_padding_x),
                                 }">
-                                @php
-                                    $string = 'Mi **massa** leo purus metus portaest ipsum dolor adipiscing
-\
-vivamus lorem varius accumsan nunc molestie elit ex arcu lacus eget sed erat dolor morbi quis.
-\
-Nunc interdum suspendisse consectetur tortor eu leo ex vivamus morbi tristique cursus purus elit vel magna sed nisl adipiscing et maecenas gravida purus sit nisi.
- \
-[Im an inline-style link](https://www.google.com) nisl maecenas eget molestie portaest urna sed placerat varius cursus ac eu quisque ac congue euismod aliquam sit ipsum commodo euismod facilisis rutrum.'
-                                @endphp
-                                <vue-markdown source="<?= $string ?>"></vue-markdown>
+                                <vue-markdown :source="activePublication.description"></vue-markdown>
 
                             </div>
                         </div>
@@ -80,19 +71,20 @@ Nunc interdum suspendisse consectetur tortor eu leo ex vivamus morbi tristique c
                                             'max-height': 30 + '%'
                                             }"
                             >
-                                <div class="relative"
+                                <div class="relative overflow-hidden"
                                      :style="{
                                             'border-width': layout.border_width + 'px',
                                             'border-color': layout.border_color,
                                             'border-radius': layout.border_radius + 'px',
                                             'box-shadow': '0 0 ' + inPixels(layout.card_shadow_size) + ' ' + layout.card_shadow_color,
                                          }"
+                                         @click="setActivePublication(child)"
                                 >
                                     <img :src="child.publicationable.thumbnail" alt="" class="object-cover h-full w-full">
                                     <div class="bg-white absolute bottom-0 w-full"
                                          :style="{
                                                 'height': layout.info_height + '%',
-                                                'padding': layout.info_padding_y + '%' + layout.info_padding_x + '%',
+                                                'padding': inPixels(layout.info_padding_y) + ' ' + inPixels(layout.info_padding_x),
                                                 'background': layout.info_background_color,
                                              }"
                                     >
@@ -119,7 +111,10 @@ Nunc interdum suspendisse consectetur tortor eu leo ex vivamus morbi tristique c
                             </div>
                         </div>
                     </div>
-                    <div class="w-full">
+                    <div class="w-full"
+                        v-if="parent"
+                        @click="setActivePublication(parent)"
+>
                         <div class="clickable inline-block font-bold"
                              :class="{'w-full': layout.back_fullwidth, 'w-auto': ! layout.back_fullwidth, 'absolute left-0': layout.back_absolute, 'bottom-0': layout.back_bottom, 'top-0': ! layout.back_bottom}"
                              :style="{

@@ -1,6 +1,13 @@
 <script>
+
+    import VueMarkdown from 'vue-markdown';
+    
     export default {
         name: "PlayerContainer",
+
+        components: {
+            VueMarkdown
+        },
 
         props: [
             'project',
@@ -33,6 +40,13 @@
                         publicationchildren.push( thispublication )
                     }
                 })
+                if((publicationchildren.length == 0 ) && this.parent) {
+                    this.project.publications.forEach( thispublication => {
+                        if( thispublication.publication_id == this.parent.id) {
+                            publicationchildren.push( thispublication )
+                        }
+                    } )
+                }
                 return publicationchildren
             },
             parent() {
@@ -62,7 +76,7 @@
 
             inPixels(value){
                 if( value != undefined ){
-                    return (value * (100 / this.videoHeight)) + 'px'
+                    return (value * (this.videoHeight / 1000)) + 'px'
                 }
             },
 

@@ -1874,7 +1874,7 @@ __webpack_require__.r(__webpack_exports__);
       background: '',
       backgrounds: [],
       example: {
-        cardnumber: 8
+        cardnumber: 4
       },
       updating: false,
       videoHeight: 400
@@ -1932,9 +1932,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     inPixels: function inPixels(value) {
       if (value != undefined) {
-        console.log(Math.ceil(value * 100 / this.videoHeight) + 'px');
-        return value * (100 / this.videoHeight) + 'px';
-        return Math.ceil(value * 100 / this.videoHeight) + 'px';
+        return value * (this.videoHeight / 1000) + 'px';
       }
     }
   }
@@ -2405,8 +2403,14 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue_markdown__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-markdown */ "./node_modules/vue-markdown/dist/vue-markdown.common.js");
+/* harmony import */ var vue_markdown__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_markdown__WEBPACK_IMPORTED_MODULE_0__);
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "PlayerContainer",
+  components: {
+    VueMarkdown: vue_markdown__WEBPACK_IMPORTED_MODULE_0___default.a
+  },
   props: ['project', 'layout'],
   data: function data() {
     return {
@@ -2434,6 +2438,15 @@ __webpack_require__.r(__webpack_exports__);
           publicationchildren.push(thispublication);
         }
       });
+
+      if (publicationchildren.length == 0 && this.parent) {
+        this.project.publications.forEach(function (thispublication) {
+          if (thispublication.publication_id == _this.parent.id) {
+            publicationchildren.push(thispublication);
+          }
+        });
+      }
+
       return publicationchildren;
     },
     parent: function parent() {
@@ -2465,7 +2478,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     inPixels: function inPixels(value) {
       if (value != undefined) {
-        return value * (100 / this.videoHeight) + 'px';
+        return value * (this.videoHeight / 1000) + 'px';
       }
     },
     togglePlayPause: function togglePlayPause() {
@@ -91350,8 +91363,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\zeronothingzero\Code\mediamagnaat\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\zeronothingzero\Code\mediamagnaat\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /Users/silvernitrate/Code/mediamagnaat/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /Users/silvernitrate/Code/mediamagnaat/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ }),
