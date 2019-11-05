@@ -11,12 +11,6 @@
                 <p class="italic text-gray-600 py-4"> {{ $project->description }} </p>
 
                 <div class="w-full flex justify-between mt-2 pb-4">
-                    <span>
-                         item 1
-                    </span>
-                    <span>
-                         item 2
-                    </span>
                     <edit-project-button
                         :project = "{{ json_encode($project)  }}"
                         inline-template

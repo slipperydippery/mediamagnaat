@@ -23,14 +23,12 @@
                     class="absolute top-0 left-0 bottom-0 right-0 flex flex-col items-center justify-center"
                     :style="{ background: layout.bg_color,
                                 color: layout.text_color,
-                                padding: inPixels(layout.padding_y) + ' ' + inPixels(layout.padding_x)
                                  }"
                     @click.self="togglePlayPause"
                 >
                     <div class="w-full" v-if="layout.title_show">
                         <div class="clickable inline-block font-bold"
-                             :class="{'w-full': layout.title_fullwidth, 'w-auto': ! layout.title_fullwidth, 'absolute left-0': layout.title_absolute, 'bottom-0': layout.title_bottom,
-                                 'top-0': ! layout.title_bottom, 'text-center mx-auto': layout.title_center}"
+                             :class="{'w-full': layout.title_fullwidth, 'w-auto': ! layout.title_fullwidth, 'text-center mx-auto': layout.title_center}"
                              :style="{
                                     background: layout.title_background_color,
                                     padding: inPixels(layout.title_padding_y) + ' ' + inPixels(layout.title_padding_x),
@@ -42,9 +40,11 @@
                         </div>
                     </div>
 
-
-
-                    <div class="flex-1 flex py-5 items-center">
+                    <div class="flex-1 flex py-5 items-center overflow-hidden"
+                        :style="{ 
+                                padding: inPixels(layout.padding_y) + ' ' + inPixels(layout.padding_x)
+                        }"
+                    >
                         <div class="w-1/3 mr-4" :class="{'h-full': layout.sidebar_fullheight}" v-if="layout.sidebar_show">
                             <div class="overflow-hidden"
                                  :class="{'h-full': layout.sidebar_fullheight}"
@@ -116,7 +116,7 @@
                         @click="setActivePublication(parent)"
 >
                         <div class="clickable inline-block font-bold"
-                             :class="{'w-full': layout.back_fullwidth, 'w-auto': ! layout.back_fullwidth, 'absolute left-0': layout.back_absolute, 'bottom-0': layout.back_bottom, 'top-0': ! layout.back_bottom}"
+                             :class="{'w-full': layout.back_fullwidth, 'w-auto': ! layout.back_fullwidth }"
                              :style="{
                                     background: layout.back_background_color,
                                     padding: inPixels(layout.back_padding_y) + ' ' + inPixels(layout.back_padding_x),
