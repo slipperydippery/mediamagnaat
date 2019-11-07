@@ -156,20 +156,18 @@
             },
 
             storeNewPublication() {
-                console.log('storing new publication')
                 var formData = new FormData();
                 formData.append('videofile', this.video.file)
                 formData.append('thumbnail', this.thumbnail.file)
                 formData.append('publication', JSON.stringify(this.publication))
-                console.log('appended to formData')
-                console.log(formData)
                 axios.post('/api/publication', formData, {
                     headers: {
-                        'Content-Type': 'multipart/form-data'
+                        'Content-Type': 'multipart/form-data',
+                        'accept': 'application/json',
+                        'Accept-Language': 'en-US,en;q=0.8',
                     }
                 })
                     .then( response => {
-                        console.log('stored new publication')
                         this.$eventBus.$emit('addedPublication', response.data)
                         window.location.href = '/project/' + this.project_slug + '/edit'
                         this.resetModal

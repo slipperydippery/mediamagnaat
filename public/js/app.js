@@ -2276,20 +2276,17 @@ __webpack_require__.r(__webpack_exports__);
     storeNewPublication: function storeNewPublication() {
       var _this3 = this;
 
-      console.log('storing new publication');
       var formData = new FormData();
       formData.append('videofile', this.video.file);
       formData.append('thumbnail', this.thumbnail.file);
       formData.append('publication', JSON.stringify(this.publication));
-      console.log('appended to formData');
-      console.log(formData);
       axios.post('/api/publication', formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'multipart/form-data',
+          'accept': 'application/json',
+          'Accept-Language': 'en-US,en;q=0.8'
         }
       }).then(function (response) {
-        console.log('stored new publication');
-
         _this3.$eventBus.$emit('addedPublication', response.data);
 
         window.location.href = '/project/' + _this3.project_slug + '/edit';
