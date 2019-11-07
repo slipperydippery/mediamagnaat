@@ -34,7 +34,8 @@ class PublicationController extends Controller
      */
     public function store(Request $request)
     {
-        return $request->all()
+        return $request->all();
+
         $publicationinput = json_decode($request->publication);
         $videofile = $request->file('videofile');
 
