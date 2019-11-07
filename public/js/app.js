@@ -2281,6 +2281,8 @@ __webpack_require__.r(__webpack_exports__);
       formData.append('videofile', this.video.file);
       formData.append('thumbnail', this.thumbnail.file);
       formData.append('publication', JSON.stringify(this.publication));
+      console.log('appended to formData');
+      console.log(formData);
       axios.post('/api/publication', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
