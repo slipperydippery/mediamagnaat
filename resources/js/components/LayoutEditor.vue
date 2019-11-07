@@ -69,7 +69,7 @@
             },
 
             patchLayout() {
-                axios.patch('/api/layout/' + this.layout.id, {
+                axios.patch('/api/layout/' + this.layout.slug, {
                     layout: this.layout
                 })
                     .then( response => {

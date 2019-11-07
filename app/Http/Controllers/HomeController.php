@@ -27,7 +27,8 @@ class HomeController extends Controller
     {
         if( Auth::check() ){
             $projects = Auth::user()->projects()->with('entrypoint.publication.publicationable', 'publications.publicationable')->get();
-            return view('dashboard', compact('projects'));
+            $slugs = Project::select('slug')->get();
+            return view('dashboard', compact('projects', 'slugs'));
         }
         return view('welcome');
     }

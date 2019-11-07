@@ -1919,7 +1919,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     patchLayout: function patchLayout() {
-      axios.patch('/api/layout/' + this.layout.id, {
+      axios.patch('/api/layout/' + this.layout.slug, {
         layout: this.layout
       }).then(function (response) {});
     },
@@ -1998,15 +1998,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "ManageProjectModal",
-  props: [],
+  props: ['slugs'],
   data: function data() {
     return {
       show: false,
       newProject: true,
       project: {
         title: '',
+        slug: '',
         description: '',
         "public": false
       },
@@ -2064,6 +2069,7 @@ __webpack_require__.r(__webpack_exports__);
     resetModal: function resetModal() {
       this.project = {
         title: '',
+        slug: '',
         description: '',
         "public": false
       };
@@ -2076,6 +2082,32 @@ __webpack_require__.r(__webpack_exports__);
       this.newProject = false;
       this.project = project;
       this.show = true;
+    },
+    toSlug: function toSlug() {
+      this.project.slug = this.slugify(this.project.title);
+      var slug = this.slugify(this.project.title);
+      var addendum = 1;
+
+      while (this.slugs.map(function (slug) {
+        return slug.slug;
+      }).includes(this.project.slug)) {
+        this.project.slug = slug + '-' + addendum;
+        addendum++;
+      }
+    },
+    slugify: function slugify(string) {
+      var a = 'àáâäæãåāăąçćčđďèéêëēėęěğǵḧîïíīįìłḿñńǹňôöòóœøōõőṕŕřßśšşșťțûüùúūǘůűųẃẍÿýžźż·/_,:;';
+      var b = 'aaaaaaaaaacccddeeeeeeeegghiiiiiilmnnnnoooooooooprrsssssttuuuuuuuuuwxyyzzz------';
+      var p = new RegExp(a.split('').join('|'), 'g');
+      return string.toString().toLowerCase().replace(/\s+/g, '-') // Replace spaces with -
+      .replace(p, function (c) {
+        return b.charAt(a.indexOf(c));
+      }) // Replace special characters
+      .replace(/&/g, '-and-') // Replace & with 'and'
+      .replace(/[^\w\-]+/g, '') // Remove all non-word characters
+      .replace(/\-\-+/g, '-') // Replace multiple - with single -
+      .replace(/^-+/, '') // Trim - from start of text
+      .replace(/-+$/, ''); // Trim - from end of text
     }
   }
 });
@@ -2164,7 +2196,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "ManagePublicationModal",
-  props: ['entrypoint', 'project_id'],
+  props: ['entrypoint', 'project_id', 'project_slug'],
   data: function data() {
     return {
       show: false,
@@ -2183,6 +2215,7 @@ __webpack_require__.r(__webpack_exports__);
         title: '',
         description: '',
         project_id: null,
+        project_slug: null,
         entrypoint: false,
         publication_id: null,
         publicationable: {
@@ -2199,6 +2232,7 @@ __webpack_require__.r(__webpack_exports__);
     this.$eventBus.$on('newPublicationInModal', this.openModal);
     this.publication.entrypoint = this.entrypoint;
     this.publication.project_id = this.project_id;
+    this.publication.project_slug = this.project_slug;
   },
   watch: {
     show: function show(newVal, oldVal) {
@@ -2231,12 +2265,12 @@ __webpack_require__.r(__webpack_exports__);
       updateFormData.append('thumbnail', this.thumbnail.file);
       updateFormData.append('publication', JSON.stringify(this.publication));
       console.log(updateFormData);
-      axios.post('/api/updatepublication/' + this.project_id, updateFormData, {
+      axios.post('/api/updatepublication/' + this.project_slug, updateFormData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       }).then(function (response) {
-        window.location.href = '/project/' + _this2.project_id + '/edit';
+        window.location.href = '/project/' + _this2.project_slug + '/edit';
       });
     },
     storeNewPublication: function storeNewPublication() {
@@ -2253,7 +2287,7 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         _this3.$eventBus.$emit('addedPublication', response.data);
 
-        window.location.href = '/project/' + _this3.project_id + '/edit';
+        window.location.href = '/project/' + _this3.project_slug + '/edit';
         _this3.resetModal;
       });
     },
@@ -2262,7 +2296,7 @@ __webpack_require__.r(__webpack_exports__);
 
       var home = this;
       axios["delete"]('/api/publication/' + publication.id).then(function (response) {
-        window.location.href = '/project/' + _this4.project_id;
+        window.location.href = '/project/' + _this4.project_slug;
       });
     },
     focusMyElement: function focusMyElement(e) {
@@ -2285,6 +2319,7 @@ __webpack_require__.r(__webpack_exports__);
         title: '',
         description: '',
         project_id: null,
+        project_slug: null,
         entrypoint: false,
         publication_id: null,
         publicationable: {
@@ -2294,6 +2329,7 @@ __webpack_require__.r(__webpack_exports__);
       this.active = false;
       this.publication.entrypoint = this.entrypoint;
       this.publication.project_id = this.project_id;
+      this.publication.project_slug = this.project_slug;
       this.show = false;
     },
     openModal: function openModal() {
@@ -76729,7 +76765,8 @@ var render = function() {
           }
         ],
         ref: "portal",
-        staticClass: "fixed top-0 left-0 w-full h-full bg-gray-300",
+        staticClass:
+          "fixed overflow-y-auto top-0 left-0 w-full h-full bg-gray-300",
         on: {
           click: function($event) {
             if ($event.target !== $event.currentTarget) {
@@ -76798,6 +76835,15 @@ var render = function() {
                     },
                     domProps: { value: _vm.project.title },
                     on: {
+                      input: [
+                        function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.project, "title", $event.target.value)
+                        },
+                        _vm.toSlug
+                      ],
                       keydown: function($event) {
                         if (
                           !$event.type.indexOf("key") &&
@@ -76809,15 +76855,19 @@ var render = function() {
                           return null
                         }
                         return _vm.resetModal($event)
-                      },
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(_vm.project, "title", $event.target.value)
                       }
                     }
                   }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    { staticClass: "block my-2", attrs: { for: "input" } },
+                    [_vm._v("slug")]
+                  ),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "block h-4" }, [
+                    _vm._v(" " + _vm._s(_vm.project.slug) + " ")
+                  ]),
                   _vm._v(" "),
                   _c("label", { staticClass: "block mb-2 mt-4" }, [
                     _c("span", { staticClass: "text-gray-700" }, [
@@ -76969,7 +77019,8 @@ var render = function() {
           }
         ],
         ref: "portal",
-        staticClass: "fixed top-0 left-0 w-full h-full bg-gray-300",
+        staticClass:
+          "fixed overflow-y-auto top-0 left-0 w-full h-full bg-gray-300",
         on: {
           click: function($event) {
             if ($event.target !== $event.currentTarget) {

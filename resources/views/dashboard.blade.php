@@ -16,7 +16,9 @@
                 </button>
             </new-project-button>
 
-            <manage-project-modal>
+            <manage-project-modal
+                :slugs= "{{ json_encode($slugs) }} "
+            >
             </manage-project-modal>
         </div>
     </div>
@@ -29,7 +31,7 @@
                 <div class="mt-8 text-left">
                     <h2 class="ml-2 text-xl sm:text-base md:text-xl lg:text-2xl xl:text-3xl antialiased tracking-tight font-semibold text-gray-700 underline"> Jouw Projecten: </h2>
                     <div class="relative w-full sm:w-1/2 md:w-1/3 lg:w-1/4 inline-block p-2 text-gray-100" v-for="project in projects" :key="project.id">
-                        <a :href="'project/' + project.id + '/edit'" class="">
+                        <a :href="'project/' + project.slug + '/edit'" class="">
                             <div class="">
                                 <img class="" :src="thumbnail(project)" alt="">
                             </div>

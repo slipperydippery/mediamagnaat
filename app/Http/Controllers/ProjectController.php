@@ -59,7 +59,8 @@ class ProjectController extends Controller
     public function edit(Project $project)
     {
         $project = Project::with('entrypoint.publication.publicationable', 'publications.publicationable')->find($project->id);
-        return view('project.edit', compact('project'));
+        $slugs = Project::select('slug')->get();
+        return view('project.edit', compact('project', 'slugs'));
     }
 
     /**

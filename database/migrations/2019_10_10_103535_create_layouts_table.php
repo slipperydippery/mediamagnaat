@@ -18,6 +18,7 @@ class CreateLayoutsTable extends Migration
         Schema::create('layouts', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('project_id');
+            $table->string('slug')->unique();
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
 
             $table->string('bg_color')->default('rgba(0,0,0,0.3)');

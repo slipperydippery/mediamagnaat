@@ -9,7 +9,12 @@ class Project extends Model
 {
     use UsesOrder;
 
-    protected $fillable = ['title', 'description', 'user_id'];
+    protected $fillable = ['title', 'slug', 'description', 'user_id'];
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 
     public function entrypoint()
     {

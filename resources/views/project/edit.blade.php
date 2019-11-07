@@ -19,7 +19,9 @@
                             <i class="material-icons clickable" @click="editProjectInModal">
                                 edit
                             </i>
-                            <manage-project-modal>
+                            <manage-project-modal
+                                :slugs="{{ json_encode($slugs) }}"
+                            >
                             </manage-project-modal>
                             </span>
                     </edit-project-button>
@@ -31,8 +33,9 @@
                 <a href=" {{ route('layout.edit', $project->layout) }} " class="inline-block w-full px-8 lg:w-auto bg-gray-200 hover:bg-blue-700 text-gray-700 hover:text-white font-bold py-2 rounded"> bewerk layout </a>
 
                 <manage-publication-modal
-                    :project_id = " {{ $project->id  }} "
-                    :entrypoint = " {{ $project->publications->count() === 0 ? 1 : 0 }} "
+                    :project_slug = "{{ json_encode($project->slug)  }}"
+                    :project_id = "{{ json_encode($project->id)  }}"
+                    :entrypoint = "{{ $project->publications->count() === 0 ? 1 : 0 }}"
                 >
                 </manage-publication-modal>
 

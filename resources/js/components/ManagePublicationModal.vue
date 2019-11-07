@@ -1,6 +1,6 @@
 <template>
     <portal to="publication">
-        <div class="fixed top-0 left-0 w-full h-full bg-gray-300" v-show="show" ref="portal" @click.self="resetModal">
+        <div class="fixed overflow-y-auto top-0 left-0 w-full h-full bg-gray-300" v-show="show" ref="portal" @click.self="resetModal">
             <div class="max-w-sm rounded overflow-hidden lg:shadow-lg lg:border mx-auto mt-10 pt-2 pb-2 bg-white">
                 <div class="relative px-6 py-4">
                     <button class="absolute top-0 right-0 mr-4 text-gray-800 hover:text-red-800" @click="resetModal">
@@ -75,7 +75,8 @@
 
         props: [
             'entrypoint',
-            'project_id'
+            'project_id',
+            'project_slug',
         ],
 
         data() {
@@ -96,6 +97,7 @@
                     title: '',
                     description: '',
                     project_id: null,
+                    project_slug: null,
                     entrypoint: false,
                     publication_id: null,
                     publicationable: {
@@ -113,6 +115,7 @@
             this.$eventBus.$on('newPublicationInModal', this.openModal)
             this.publication.entrypoint = this.entrypoint
             this.publication.project_id = this.project_id
+            this.publication.project_slug = this.project_slug
         },
 
         watch: {
@@ -142,13 +145,13 @@
                 updateFormData.append('thumbnail', this.thumbnail.file)
                 updateFormData.append('publication', JSON.stringify(this.publication))
                 console.log(updateFormData)
-                axios.post('/api/updatepublication/' + this.project_id, updateFormData, {
+                axios.post('/api/updatepublication/' + this.project_slug, updateFormData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
                 })
                     .then( response => {
-                        window.location.href = '/project/' + this.project_id + '/edit'
+                        window.location.href = '/project/' + this.project_slug + '/edit'
                     } )
             },
 
@@ -164,7 +167,7 @@
                 })
                     .then( response => {
                         this.$eventBus.$emit('addedPublication', response.data)
-                        window.location.href = '/project/' + this.project_id + '/edit'
+                        window.location.href = '/project/' + this.project_slug + '/edit'
                         this.resetModal
                     });
             },
@@ -173,7 +176,7 @@
                 var home = this
                 axios.delete('/api/publication/' + publication.id)
                     .then( response => {
-                        window.location.href = '/project/' + this.project_id
+                        window.location.href = '/project/' + this.project_slug
                     } )
             },
 
@@ -198,6 +201,7 @@
                     title: '',
                     description: '',
                     project_id: null,
+                    project_slug: null,
                     entrypoint: false,
                     publication_id: null,
                     publicationable: {
@@ -207,6 +211,7 @@
                 this.active = false
                 this.publication.entrypoint = this.entrypoint
                 this.publication.project_id = this.project_id
+                this.publication.project_slug = this.project_slug
                 this.show = false
             },
 

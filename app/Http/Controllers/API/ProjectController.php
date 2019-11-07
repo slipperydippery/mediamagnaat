@@ -41,12 +41,13 @@ class ProjectController extends Controller
 
         $project = Project::create([
             'title'         => $request->input('project.title'),
+            'slug'          => $request->input('project.slug'),
             'description'   => $request->input('project.description'),
             'user_id'       => $user->id,
             'public'        => $request->input('project.public'),
         ]);
 
-        $project->layout()->create();
+        $project->layout()->create(['slug' => $project->slug]);
 
         $project->entrypoint()->create();
 
