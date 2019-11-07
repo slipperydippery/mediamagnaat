@@ -2276,6 +2276,7 @@ __webpack_require__.r(__webpack_exports__);
     storeNewPublication: function storeNewPublication() {
       var _this3 = this;
 
+      console.log('storing new publication');
       var formData = new FormData();
       formData.append('videofile', this.video.file);
       formData.append('thumbnail', this.thumbnail.file);
@@ -2285,10 +2286,14 @@ __webpack_require__.r(__webpack_exports__);
           'Content-Type': 'multipart/form-data'
         }
       }).then(function (response) {
+        console.log('stored new publication');
+
         _this3.$eventBus.$emit('addedPublication', response.data);
 
         window.location.href = '/project/' + _this3.project_slug + '/edit';
         _this3.resetModal;
+      })["catch"](function (error) {
+        console.log('error here');
       });
     },
     deletePublication: function deletePublication(publication) {

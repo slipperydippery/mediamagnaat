@@ -156,6 +156,7 @@
             },
 
             storeNewPublication() {
+                console.log('storing new publication')
                 var formData = new FormData();
                 formData.append('videofile', this.video.file)
                 formData.append('thumbnail', this.thumbnail.file)
@@ -166,10 +167,14 @@
                     }
                 })
                     .then( response => {
+                        console.log('stored new publication')
                         this.$eventBus.$emit('addedPublication', response.data)
                         window.location.href = '/project/' + this.project_slug + '/edit'
                         this.resetModal
-                    });
+                    })
+                    .catch( error => {
+                        console.log('error here')
+                    } )
             },
 
             deletePublication(publication) {
