@@ -37,8 +37,6 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        return $request->all();
-        
         $user = auth('api')->user();
 
         $project = Project::create([
