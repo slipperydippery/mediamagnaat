@@ -2576,7 +2576,8 @@ __webpack_require__.r(__webpack_exports__);
       return Math.round(10 / Math.pow(string.length, 0.4) * 10) / 10;
     },
     thumbnail: function thumbnail(project) {
-      if (project.entrypoint.publication != null) {
+      if (project.entrypoint && project.entrypoint.publication != null) {
+        console.log('testing');
         return project.entrypoint.publication.publicationable.thumbnail;
       }
 
@@ -91418,8 +91419,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/silvernitrate/Code/mediamagnaat/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Users/silvernitrate/Code/mediamagnaat/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\zeronothingzero\Code\mediamagnaat\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\zeronothingzero\Code\mediamagnaat\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ }),

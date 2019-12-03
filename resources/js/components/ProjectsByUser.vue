@@ -40,7 +40,8 @@
             },
 
             thumbnail(project) {
-                if (project.entrypoint.publication != null) {
+                if (project.entrypoint && project.entrypoint.publication != null) {
+                    console.log('testing');
                     return project.entrypoint.publication.publicationable.thumbnail
                 }
                 return '/img/page.svg'
